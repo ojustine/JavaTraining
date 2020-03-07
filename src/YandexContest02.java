@@ -31,7 +31,7 @@ public class YandexContest02
 			for (int i = 0; i < requestsNum; i++)
 			{
 				request = buffReader.readLine().split(" |:");
-				if ("APPIONT".equals(request[0]))
+				if ("APPOINT".equals(request[0]))
 					setMeet(request);
 				else if ("PRINT".equals(request[0]))
 					printPersonMeets(request);
@@ -52,10 +52,10 @@ public class YandexContest02
 		int duration = Integer.parseInt(request[4]);
 		int partySize = Integer.parseInt(request[5]);
 		String[] party = new String[partySize];
+		for (int j = 0; j < partySize; j++)
+			party[j] = request[j + 6];
 		if (canSetMeet(time, duration))
 		{
-			for (int j = 0; j < partySize; j++)
-				party[j] = request[j + 6];
 			meets.add(new Meet(time, duration, party));
 			System.out.println("OK");
 		}
@@ -63,10 +63,8 @@ public class YandexContest02
 		{
 			System.out.println("FAIL");
 			for (String person : party)
-			{
 				System.out.print(person);
-				System.out.println();
-			}
+			System.out.println();
 		}
 	}
 
@@ -74,8 +72,8 @@ public class YandexContest02
 	{
 		for (Meet meet : meets)
 		{
-			if ((time >= meet.start && time <= meet.start + meet.duration)
-			|| (time + duration >= meet.start && time + duration <= meet.start + meet.duration))
+			if ((time > meet.start && time < meet.start + meet.duration)
+			|| (time + duration > meet.start && time + duration < meet.start + meet.duration))
 				return (false);
 		}
 		return (true);
@@ -87,8 +85,8 @@ public class YandexContest02
 		int dayDuration = (23 - 8) * 60;
 		for (Meet meet : meets)
 		{
-			if (((meet.start >= dayBegin && meet.start <= dayBegin + dayDuration)
-			|| (meet.start + meet.duration >= dayBegin && meet.start + meet.duration <= dayBegin + dayDuration))
+			if (((meet.start > dayBegin && meet.start < dayBegin + dayDuration)
+			|| (meet.start + meet.duration > dayBegin && meet.start + meet.duration < dayBegin + dayDuration))
 			&& isPersonOnMeet(meet, request[2]))
 				printMeet(meet);
 		}
